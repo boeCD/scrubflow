@@ -17,11 +17,10 @@ Just drop it in, add your image sequences as HTML with `data-` attributes, and l
 **1. Add to your site:**
 ```html
 <script src="https://cdn.jsdelivr.net/gh/boeCD/cd-library@main/imageScrubber/scrubflow-0.0.1.js"></script>
+```
 2. Use this HTML for each sequence:
 
-html
-Copy
-Edit
+```html
 <div
   data-image-sequence
   data-folder="YOUR_FOLDER_URL/"
@@ -36,5 +35,6 @@ Edit
   </div>
   <img data-sequence-img style="width:400px;height:220px;object-fit:cover;">
 </div>
+```
 3. No JS needed!
 Just control .scrub-container’s width (e.g. via Webflow Interactions).
