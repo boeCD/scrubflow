@@ -1,5 +1,5 @@
 /*!
- * Scrubflow.js v1.0.0
+ * Scrubflow.js v1.1.0
  * (c) 2024 boeCD
  * MIT License (with required attribution)
  * https://github.com/boeCD/scrubflow
@@ -7,37 +7,38 @@
  * You must credit "boeCD" in public or commercial usage, see LICENSE.
  *
  * Usage:
- * 1. Add [data-image-sequence] to a parent div.
- * 2. Set all options as data attributes (see below).
- * 3. Add [data-sequence-img], [data-sequence-scrub], [data-sequence-track] inside the div.
+ * 1. Add [sf-sequence] to a parent div.
+ * 2. Set all options as attributes (see below).
+ * 3. Add [sf-sequence-img], [sf-sequence-scrub], [sf-sequence-track] inside the div.
  * 4. Control .scrub-container width (e.g. via CSS, JS, or interactions).
  * 5. Script auto-initializes all sequences on page load.
  *
- * Data Attributes:
- *   data-folder       (required) Folder URL (trailing slash)
- *   data-prefix       (optional) Filename prefix (default: "")
- *   data-ext          (optional) File extension (default: ".jpg")
- *   data-start        (required) First frame number (int)
- *   data-end          (required) Last frame number (int)
- *   data-pad          (optional) Number padding digits (default: 3)
- *   data-preload      (optional) If present, preload all images
+ * Attributes:
+ *   sf-folder       (required) Folder URL (trailing slash)
+ *   sf-prefix       (optional) Filename prefix (default: "")
+ *   sf-ext          (optional) File extension (default: ".jpg")
+ *   sf-start        (required) First frame number (int)
+ *   sf-end          (required) Last frame number (int)
+ *   sf-pad          (optional) Number padding digits (default: 3)
+ *   sf-preload      (optional) If present, preload all images
+ *   sf-debug        (optional) If present, enable debug logs for this instance
  */
 
-class ImageSequenceScrub {
+class Scrubflow {
   constructor(el) {
     this.el = el;
-    this.debug = window.SCRUBFLOW_DEBUG || el.hasAttribute("data-debug");
+    this.debug = window.SCRUBFLOW_DEBUG || el.hasAttribute("sf-debug");
 
-    this.folder = el.getAttribute("data-folder");
-    this.prefix = el.getAttribute("data-prefix") || "";
-    this.ext = el.getAttribute("data-ext") || ".jpg";
-    this.start = parseInt(el.getAttribute("data-start"), 10) || 1;
-    this.end = parseInt(el.getAttribute("data-end"), 10) || 1;
-    this.pad = parseInt(el.getAttribute("data-pad"), 10) || 3;
-    this.preload = el.hasAttribute("data-preload");
-    this.target = el.querySelector("[data-sequence-img]");
-    this.scrubContainer = el.querySelector("[data-sequence-scrub]");
-    this.outerTrack = el.querySelector("[data-sequence-track]");
+    this.folder = el.getAttribute("sf-folder");
+    this.prefix = el.getAttribute("sf-prefix") || "";
+    this.ext = el.getAttribute("sf-ext") || ".jpg";
+    this.start = parseInt(el.getAttribute("sf-start"), 10) || 1;
+    this.end = parseInt(el.getAttribute("sf-end"), 10) || 1;
+    this.pad = parseInt(el.getAttribute("sf-pad"), 10) || 3;
+    this.preload = el.hasAttribute("sf-preload");
+    this.target = el.querySelector("[sf-sequence-img]");
+    this.scrubContainer = el.querySelector("[sf-sequence-scrub]");
+    this.outerTrack = el.querySelector("[sf-sequence-track]");
 
     if (this.debug) {
       console.log("[Scrubflow] Initializing instance:", {
@@ -142,11 +143,11 @@ class ImageSequenceScrub {
     }
   }
 
-  // Static: Auto-initialize on all [data-image-sequence]
+  // Static: Auto-initialize on all [sf-sequence]
   static initAll() {
-    document.querySelectorAll("[data-image-sequence]").forEach(el => {
-      if (!el._imageSequenceScrub) {
-        el._imageSequenceScrub = new ImageSequenceScrub(el);
+    document.querySelectorAll("[sf-sequence]").forEach(el => {
+      if (!el._scrubflowInstance) {
+        el._scrubflowInstance = new Scrubflow(el);
       }
     });
     if (window.SCRUBFLOW_DEBUG) {
@@ -156,5 +157,5 @@ class ImageSequenceScrub {
 }
 
 if (typeof window !== "undefined") {
-  document.addEventListener("DOMContentLoaded", () => ImageSequenceScrub.initAll());
+  document.addEventListener("DOMContentLoaded", () => Scrubflow.initAll());
 }
