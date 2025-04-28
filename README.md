@@ -1,7 +1,3 @@
-1. README.md
-markdown
-Copy
-Edit
 # Scrubflow.js
 
 [![jsDelivr](https://data.jsdelivr.com/v1/package/gh/boeCD/cd-library/badge)](https://www.jsdelivr.com/package/gh/boeCD/cd-library)
