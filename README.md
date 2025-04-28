@@ -12,7 +12,7 @@ Just drop it in, add your image sequences as HTML with `data-` attributes, and l
 
 **1. Add to your site:**
 ```html
-<script src="https://cdn.jsdelivr.net/gh/boeCD/cd-library@main/imageScrubber/scrubflow-0.0.1.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/boeCD/scrubflow@main/index.js"></script>
 ```
 
 **2. Use this HTML for each sequence:**
