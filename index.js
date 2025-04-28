@@ -26,6 +26,8 @@
 class ImageSequenceScrub {
   constructor(el) {
     this.el = el;
+    this.debug = window.SCRUBFLOW_DEBUG || el.hasAttribute("data-debug");
+
     this.folder = el.getAttribute("data-folder");
     this.prefix = el.getAttribute("data-prefix") || "";
     this.ext = el.getAttribute("data-ext") || ".jpg";
@@ -36,8 +38,26 @@ class ImageSequenceScrub {
     this.target = el.querySelector("[data-sequence-img]");
     this.scrubContainer = el.querySelector("[data-sequence-scrub]");
     this.outerTrack = el.querySelector("[data-sequence-track]");
+
+    if (this.debug) {
+      console.log("[Scrubflow] Initializing instance:", {
+        folder: this.folder,
+        prefix: this.prefix,
+        ext: this.ext,
+        start: this.start,
+        end: this.end,
+        pad: this.pad,
+        preload: this.preload,
+        target: this.target,
+        scrubContainer: this.scrubContainer,
+        outerTrack: this.outerTrack
+      });
+    }
+
     if (!this.folder || !this.target || !this.scrubContainer || !this.outerTrack) {
-      // Essential config missing—do nothing.
+      if (this.debug) {
+        console.error("[Scrubflow] Essential configuration missing for element:", el);
+      }
       return;
     }
     this.images = this.createImageSequenceArray();
@@ -54,10 +74,16 @@ class ImageSequenceScrub {
     for (let i = this.start; i <= this.end; i++) {
       arr.push(`${this.folder}${this.prefix}${this.padNum(i)}${this.ext}`);
     }
+    if (this.debug) {
+      console.log(`[Scrubflow] Image array created (${arr.length} images):`, arr);
+    }
     return arr;
   }
 
   preloadImages() {
+    if (this.debug) {
+      console.log("[Scrubflow] Preloading images...");
+    }
     this.images.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -67,11 +93,17 @@ class ImageSequenceScrub {
   getPercentWidth() {
     const w = this.scrubContainer.offsetWidth;
     const total = this.outerTrack.offsetWidth;
+    if (this.debug) {
+      console.log(`[Scrubflow] Calculated width: ${w}/${total} = ${total ? (w / total) : 0}`);
+    }
     return total ? (w / total) : 0;
   }
 
   render() {
     const idx = Math.round(this.frame.i);
+    if (this.debug) {
+      console.log(`[Scrubflow] Rendering frame: ${idx} -> ${this.images[idx]}`);
+    }
     if (this.target.tagName && this.target.tagName.toLowerCase() === "img") {
       this.target.src = this.images[idx];
     } else {
@@ -82,6 +114,9 @@ class ImageSequenceScrub {
   updateFrameFromWidth() {
     const percent = this.getPercentWidth(); // 0..1
     const frameIndex = percent * (this.images.length - 1);
+    if (this.debug) {
+      console.log(`[Scrubflow] updateFrameFromWidth: percent=${percent}, frameIndex=${frameIndex}`);
+    }
     if (window.gsap) {
       gsap.to(this.frame, {
         i: frameIndex,
@@ -102,6 +137,9 @@ class ImageSequenceScrub {
     this.updateFrameFromWidth();
     this.observer = new ResizeObserver(() => this.updateFrameFromWidth());
     this.observer.observe(this.scrubContainer);
+    if (this.debug) {
+      console.log("[Scrubflow] ResizeObserver attached.");
+    }
   }
 
   // Static: Auto-initialize on all [data-image-sequence]
@@ -111,6 +149,9 @@ class ImageSequenceScrub {
         el._imageSequenceScrub = new ImageSequenceScrub(el);
       }
     });
+    if (window.SCRUBFLOW_DEBUG) {
+      console.log("[Scrubflow] All instances initialized.");
+    }
   }
 }
 
