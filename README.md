@@ -1,6 +1,6 @@
 # Scrubflow.js
 
-[![jsDelivr](https://data.jsdelivr.com/v1/package/gh/boeCD/cd-library/badge)](https://www.jsdelivr.com/package/gh/boeCD/cd-library)
+[![](https://data.jsdelivr.com/v1/package/gh/boeCD/scrubflow/badge)](https://www.jsdelivr.com/package/gh/boeCD/scrubflow)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 **Scrubflow.js** is a zero-config, attribute-driven image sequence scrubber for Webflow and custom websites.  
